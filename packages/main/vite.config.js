@@ -1,6 +1,7 @@
 import {node} from '../../.electron-vendors.cache.json';
 import {join} from 'node:path';
 import {injectAppVersion} from '../../version/inject-app-version-plugin.mjs';
+import { obfuscator } from 'rollup-obfuscator';
 
 const PACKAGE_ROOT = __dirname;
 const PROJECT_ROOT = join(PACKAGE_ROOT, '../..');
@@ -37,7 +38,14 @@ const config = {
     emptyOutDir: true,
     reportCompressedSize: false,
   },
-  plugins: [injectAppVersion()],
+  plugins: [
+    obfuscator({
+      sourceMap: process.env.MODE === 'development',
+      exclude: ['./node_modules/**/*'],
+      target: 'node',
+    }),
+    injectAppVersion(),
+  ],
 };
 
 export default config;
