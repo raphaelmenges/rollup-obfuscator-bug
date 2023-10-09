@@ -39,11 +39,14 @@ const config = {
     reportCompressedSize: false,
   },
   plugins: [
-    obfuscator({
+    {
+      ...obfuscator({
       sourceMap: process.env.MODE === 'development',
       exclude: ['./node_modules/**/*'],
       target: 'node',
-    }),
+      }),
+      enforce: 'post',
+    },
     injectAppVersion(),
   ],
 };
